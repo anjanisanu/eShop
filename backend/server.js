@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import connectDB from './config/db.js';
 import productRoutes from './routes/productRoutes.js';
+import { errorHandler } from './middleware/errorMiddleware.js';
 import AppError from './utils/appError.js';
 
 dotenv.config();
@@ -18,12 +19,7 @@ app.all('*', (req, res, next) => {
 	next(new AppError(`${req.originalUrl} does not exists`, 404));
 });
 
-app.use((err, req, res, next) => {
-	err.statusCode = err.statusCode || 500;
-	res.status(err.statusCode).json({
-		message: err.message
-	});
-});
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 8080;
 
