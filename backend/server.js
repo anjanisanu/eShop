@@ -13,6 +13,12 @@ app.get('/', (req, res) => {
 
 app.use('/api/products', productRoutes);
 
+app.all('*', (req, res, next) => {
+	res.status(404).json({
+		message: `Cannot find ${req.originalUrl}`
+	});
+});
+
 const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, console.log(`Server Running in ${process.env.NODE_ENV} mode on PORT ${PORT}`));
