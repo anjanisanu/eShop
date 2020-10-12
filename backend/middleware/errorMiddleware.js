@@ -5,6 +5,17 @@ const handleDbCastError = (err) => {
 	return new AppError(message, 400);
 };
 
+const handleDbDuplicate = (err) => {
+	const message = `'${err.keyValue.name}' already exists`;
+	return new AppError(message, 400);
+};
+
+const handleDbValidationError = (err) => {
+	const errors = Object.values(err.errors).map((el) => el.message).join('. ');
+	const message = `Invalid Data: ${errors}`;
+	return new AppError(message, 400);
+};
+
 const sendErrDev = (err, res) => {
 	res.status(err.statusCode).json({
 		message: err.message,
@@ -39,6 +50,8 @@ const errorHandler = (err, req, res, next) => {
 
 	if (process.env.NODE_ENV === 'production') {
 		if (err.name === 'CastError') err = handleDbCastError(err);
+		if (err.code === '11000') err = handleDbDuplicate(err);
+		if (err.name === 'ValidationError') err = handleDbValidationError(err);
 
 		sendErrProd(err, res);
 	}
