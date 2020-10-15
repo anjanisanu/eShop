@@ -21,6 +21,22 @@ export const authUser = catchAsync(async (req, res, next) => {
 	}
 });
 
+export const registerUser = catchAsync(async (req, res, next) => {
+	const { name, email, password } = req.body;
+	const userExists = await User.findOne({ email });
+
+	if (userExists) return next(new AppError('User with this email already exists', 401));
+
+	const user = await User.create({ name, email, password });
+	res.status(201).json({
+		_id: user._id,
+		name: user.name,
+		email: user.email,
+		isAdmin: user.isAdmin,
+		token: generateToken(user._id)
+	});
+});
+
 export const getUserProfile = catchAsync(async (req, res, next) => {
 	const user = await User.findById(req.user._id);
 
