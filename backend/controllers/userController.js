@@ -20,3 +20,18 @@ export const authUser = catchAsync(async (req, res, next) => {
 		return next(new AppError('Invalid Credentials', 401));
 	}
 });
+
+export const getUserProfile = catchAsync(async (req, res, next) => {
+	const user = await User.findById(req.user._id);
+
+	if (!user) {
+		return next(new AppError('No user found. Plese login', 401));
+	}
+
+	res.status(200).json({
+		_id: user._id,
+		name: user.name,
+		email: user.email,
+		isAdmin: user.isAdmin
+	});
+});
