@@ -51,3 +51,28 @@ export const getUserProfile = catchAsync(async (req, res, next) => {
 		isAdmin: user.isAdmin
 	});
 });
+
+export const updateUserProfile = catchAsync(async (req, res, next) => {
+	const user = await User.findById(req.user._id);
+
+	if (!user) {
+		return next(new AppError('No user found. Plese login', 401));
+	}
+
+	user.name = req.body.name || user.name;
+	user.email = req.body.email || user.email;
+
+	if (req.body.password) {
+		user.password = req.body.password;
+	}
+
+	const updatedUser = await user.save();
+
+	res.status(200).json({
+		_id: updatedUser._id,
+		name: updatedUser.name,
+		email: updatedUser.email,
+		isAdmin: updatedUser.isAdmin,
+		token: generateToken(updatedUser._id)
+	});
+});
