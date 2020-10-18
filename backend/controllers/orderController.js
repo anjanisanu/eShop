@@ -3,7 +3,7 @@ import catchAsync from './../utils/catchAsync.js';
 import AppError from './../utils/appError.js';
 
 export const addOrderItems = catchAsync(async (req, res, next) => {
-	const { orderItems, shippingAddress, paymentAddress, itemsPrice, taxPrice, shippingPrice, totalPrice } = req.body;
+	const { orderItems, shippingAddress, paymentMethod, itemsPrice, taxPrice, shippingPrice, totalPrice } = req.body;
 
 	if (orderItems && orderItems.length === 0) return next(new AppError('No Order Items', 400));
 
@@ -11,7 +11,7 @@ export const addOrderItems = catchAsync(async (req, res, next) => {
 		orderItems,
 		user: req.user._id,
 		shippingAddress,
-		paymentAddress,
+		paymentMethod,
 		itemsPrice,
 		taxPrice,
 		shippingPrice,
@@ -20,7 +20,5 @@ export const addOrderItems = catchAsync(async (req, res, next) => {
 
 	const createdOrder = await order.save();
 
-	res.status(201).json({
-		createdOrder
-	});
+	res.status(201).json(createdOrder);
 });
