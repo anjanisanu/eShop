@@ -51,3 +51,11 @@ export const updateOrderToPaid = catchAsync(async (req, res, next) => {
 
 	res.status(200).json(upatedOrder);
 });
+
+export const getMyOrders = catchAsync(async (req, res, next) => {
+	const orders = await Order.find({ user: req.user._id });
+
+	if (!orders) return next(new AppError('You have not ordered any items yet', 404));
+
+	res.status(200).json(orders);
+});
