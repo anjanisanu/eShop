@@ -22,3 +22,8 @@ export const protect = catchAsync(async (req, res, next) => {
 		return next(new AppError('Invalid Token, Authorization denied.', 401));
 	}
 });
+
+export const isAdmin = (req, res, next) => {
+	if (req.user && req.user.isAdmin === true) return next();
+	next(new AppError('Not Authorized', 401));
+};

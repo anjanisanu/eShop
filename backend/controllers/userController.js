@@ -76,3 +76,9 @@ export const updateUserProfile = catchAsync(async (req, res, next) => {
 		token: generateToken(updatedUser._id)
 	});
 });
+
+export const getAllUsers = catchAsync(async (req, res, next) => {
+	const users = await User.find();
+
+	res.json(users);
+});
