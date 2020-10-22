@@ -83,6 +83,13 @@ export const getAllUsers = catchAsync(async (req, res, next) => {
 	res.json(users);
 });
 
+export const getUser = catchAsync(async (req, res, next) => {
+	const user = await User.findById(req.params.id);
+	if (!user) return next(new AppError('No user found with that ID', 401));
+
+	res.json(user);
+});
+
 export const deleteUser = catchAsync(async (req, res, next) => {
 	const user = await User.findByIdAndRemove(req.params.id);
 
