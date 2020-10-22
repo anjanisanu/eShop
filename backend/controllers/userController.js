@@ -84,7 +84,7 @@ export const getAllUsers = catchAsync(async (req, res, next) => {
 });
 
 export const getUser = catchAsync(async (req, res, next) => {
-	const user = await User.findById(req.params.id);
+	const user = await User.findById(req.params.id).select('name email isAdmin');
 	if (!user) return next(new AppError('No user found with that ID', 401));
 
 	res.json(user);
@@ -96,4 +96,22 @@ export const deleteUser = catchAsync(async (req, res, next) => {
 	if (!user) return next(new AppError('Could not find user with that id', 404));
 
 	res.status(204).json({ message: 'User Removed' });
+});
+
+export const updateUser = catchAsync(async (req, res, next) => {
+	let { name, email, isAdmin } = req.body;
+
+	const user = await User.findById(req.params.id);
+
+	if (!user) {
+		return next(new AppError('No user found with that ID', 401));
+	}
+
+	if (!name) name = user.name;
+	if (!email) email = user.email;
+	if (isAdmin === undefined) isAdmin = user.isAdmin;
+
+	const updatedUser = await User.findByIdAndUpdate(req.params.id, { name, email, isAdmin }, { new: true });
+
+	res.status(200).json(updatedUser);
 });
