@@ -15,16 +15,16 @@ export const getProduct = catchAsync(async (req, res, next) => {
 });
 
 export const createProduct = catchAsync(async (req, res, next) => {
-	const { name, image, description, brand, category, price, countInStock } = req.body;
+	// const { name, image, description, brand, category, price, countInStock } = req.body;
 	const product = await Product.create({
 		user: req.user._id,
-		name,
-		image,
-		description,
-		brand,
-		category,
-		price,
-		countInStock
+		name: 'New Product',
+		image: '/images/sample.jpg',
+		description: 'Sample Description',
+		brand: 'Sample Brand',
+		category: 'Sample Category',
+		price: 0,
+		countInStock: 0
 	});
 
 	res.status(201).json(product);
