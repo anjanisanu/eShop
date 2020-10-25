@@ -52,6 +52,19 @@ export const updateOrderToPaid = catchAsync(async (req, res, next) => {
 	res.status(200).json(upatedOrder);
 });
 
+export const updateOrderToDelivered = catchAsync(async (req, res, next) => {
+	const order = await Order.findById(req.params.id);
+
+	if (!order) return next(new AppError('No Order found', 404));
+
+	order.isDelivered = true;
+	order.deliveredAt = Date.now();
+
+	const upatedOrder = await order.save();
+
+	res.status(200).json(upatedOrder);
+});
+
 export const getMyOrders = catchAsync(async (req, res, next) => {
 	const orders = await Order.find({ user: req.user._id });
 
