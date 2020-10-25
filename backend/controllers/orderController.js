@@ -59,3 +59,8 @@ export const getMyOrders = catchAsync(async (req, res, next) => {
 
 	res.status(200).json(orders);
 });
+
+export const getAllOrders = catchAsync(async (req, res, next) => {
+	const orders = await Order.find().populate('user', 'id name');
+	res.status(200).json(orders);
+});
