@@ -66,3 +66,28 @@ export const deleteProduct = catchAsync(async (req, res, next) => {
 
 	res.status(204).json({ message: 'Product Deleted.' });
 });
+
+export const createProductReview = catchAsync(async (req, res, next) => {
+	const { rating, comment } = req.body;
+	const product = await Product.findById(req.params.id);
+	if (!product) return next(new AppError('No product found with that ID', 404));
+
+	const alreadyReviewd = product.review.find((r) => r.user.toString() === req.user._id.toString());
+
+	if (alreadyReviewd) return next(new AppError('You have already reviewd this product', 400));
+
+	const review = {
+		name: req.user.name,
+		rating: Number(rating),
+		comment,
+		user: req.user._id
+	};
+
+	product.review.push(review);
+	product.numReviews = product.review.length;
+	product.rating = product.review.reduce((acc, item) => item.rating + acc, 0) / product.review.length;
+
+	await product.save();
+
+	res.status(201).json({ message: 'Review Added' });
+});
