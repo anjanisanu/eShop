@@ -34,7 +34,9 @@ const OrderScreen = ({ match, history }) => {
 			return (Math.round(num * 100) / 100).toFixed(2);
 		};
 
-		order.itemsPrice = addDecimals(order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0));
+		if (order) {
+			order.itemsPrice = addDecimals(order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0));
+		}
 	}
 
 	useEffect(
@@ -82,7 +84,7 @@ const OrderScreen = ({ match, history }) => {
 		<Loader />
 	) : error ? (
 		<Message variant='danger'>{error}</Message>
-	) : (
+	) : order ? (
 		<Fragment>
 			<h1>Order {order._id}</h1>
 			<Row>
@@ -205,6 +207,8 @@ const OrderScreen = ({ match, history }) => {
 				</Col>
 			</Row>
 		</Fragment>
+	) : (
+		<h1>Loading</h1>
 	);
 };
 

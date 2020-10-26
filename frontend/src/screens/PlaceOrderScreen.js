@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Message from './../components/Message';
 import CheckoutSteps from './../components/CheckoutSteps';
 import { createOrder } from './../actions/orderActions';
+import { CART_REMOVE_ITEMS } from './../constants/cartConstants';
 
 const PlaceOrderScreen = ({ history }) => {
 	const dispatch = useDispatch();
@@ -45,6 +46,10 @@ const PlaceOrderScreen = ({ history }) => {
 				totalPrice: cart.totalPrice
 			})
 		);
+		setTimeout(() => {
+			localStorage.removeItem('cartItems');
+			dispatch({ type: CART_REMOVE_ITEMS });
+		}, 1000);
 	};
 	return (
 		<Fragment>

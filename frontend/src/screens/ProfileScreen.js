@@ -6,6 +6,7 @@ import Message from '../components/Message';
 import Loader from './../components/Loader';
 import { getUserDetails, updateUserProfileDetails } from './../actions/userActions';
 import { listMyOrders } from './../actions/orderActions';
+import { ORDER_DETAILS_RESET } from './../constants/orderConstants';
 
 const ProfileScreen = ({ history }) => {
 	const [ name, setName ] = useState('');
@@ -30,6 +31,7 @@ const ProfileScreen = ({ history }) => {
 
 	useEffect(
 		() => {
+			dispatch({ type: ORDER_DETAILS_RESET });
 			if (!userInfo) {
 				history.push('/login');
 			} else {
