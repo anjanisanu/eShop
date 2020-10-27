@@ -1,5 +1,8 @@
 import axios from 'axios';
 import {
+	TOP_PRODUCT_REQUEST,
+	TOP_PRODUCT_SUCCESS,
+	TOP_PRODUCT_FAIL,
 	PRODUCT_LIST_REQUEST,
 	PRODUCT_LIST_SUCCESS,
 	PRODUCT_LIST_FAIL,
@@ -19,6 +22,23 @@ import {
 	PRODUCT_CREATE_REVIEW_SUCCESS,
 	PRODUCT_CREATE_REVIEW_FAIL
 } from './../constants/productConstants';
+
+export const listTopProducts = () => async (dispatch) => {
+	try {
+		dispatch({ type: TOP_PRODUCT_REQUEST });
+
+		const { data } = await axios.get(`/api/products/top-products`);
+		dispatch({
+			type: TOP_PRODUCT_SUCCESS,
+			payload: data
+		});
+	} catch (err) {
+		dispatch({
+			type: TOP_PRODUCT_FAIL,
+			payload: err.response && err.response.data.message ? err.response.data.message : err.message
+		});
+	}
+};
 
 export const listProducts = (keyword = '', pageNumber = '') => async (dispatch) => {
 	try {

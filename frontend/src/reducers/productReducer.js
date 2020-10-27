@@ -1,4 +1,7 @@
 import {
+	TOP_PRODUCT_REQUEST,
+	TOP_PRODUCT_SUCCESS,
+	TOP_PRODUCT_FAIL,
 	PRODUCT_LIST_REQUEST,
 	PRODUCT_LIST_SUCCESS,
 	PRODUCT_LIST_FAIL,
@@ -21,6 +24,22 @@ import {
 	PRODUCT_CREATE_REVIEW_FAIL,
 	PRODUCT_CREATE_REVIEW_RESET
 } from './../constants/productConstants';
+
+export const topProductsReducer = (state = { products: [] }, action) => {
+	switch (action.type) {
+		case TOP_PRODUCT_REQUEST:
+			return { loading: true };
+
+		case TOP_PRODUCT_SUCCESS:
+			return { loading: false, products: action.payload };
+
+		case TOP_PRODUCT_FAIL:
+			return { loading: false, error: action.payload };
+
+		default:
+			return state;
+	}
+};
 
 export const productReducer = (state = { products: [] }, action) => {
 	switch (action.type) {
