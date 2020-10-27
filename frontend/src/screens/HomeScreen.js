@@ -2,6 +2,7 @@ import React, { Fragment, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col } from 'react-bootstrap';
 
+import Meta from './../components/Meta';
 import ProductCarousel from './../components/ProductCarousel';
 import Product from './../components/Product';
 import Message from './../components/Message';
@@ -27,6 +28,7 @@ const HomeScreen = ({ match }) => {
 
 	return (
 		<Fragment>
+			<Meta />
 			{!keyword && <ProductCarousel />}
 			<h1>Latest Products</h1>
 			{loading ? (

@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, Image, ListGroup, Button, Form } from 'react-bootstrap';
+import Meta from './../components/Meta';
 import Rating from './../components/Rating';
 import Loader from './../components/Loader';
 import Message from './../components/Message';
@@ -59,6 +60,7 @@ const ProductScreen = ({ history, match }) => {
 				<Message variant='danger'>{error}</Message>
 			) : (
 				<Fragment>
+					<Meta title={`${product.name} | eShop`} />
 					<Row>
 						<Col md={6}>
 							<Image src={product.image} alt={product.name} fluid />
