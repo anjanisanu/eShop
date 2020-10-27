@@ -3,6 +3,9 @@ import catchAsync from './../utils/catchAsync.js';
 import AppError from './../utils/appError.js';
 
 export const getProducts = catchAsync(async (req, res, next) => {
+	const pageSize = 10;
+	const page = Number(req.query.pageNumber) || 1;
+
 	const keyword = req.query.keyword
 		? {
 				name: {
@@ -12,8 +15,9 @@ export const getProducts = catchAsync(async (req, res, next) => {
 			}
 		: {};
 
-	const products = await Product.find({ ...keyword });
-	res.json(products);
+	const count = await Product.countDocuments({ ...keyword });
+	const products = await Product.find({ ...keyword }).limit(pageSize).skip(pageSize * (page - 1));
+	res.json({ products, page, pages: Math.ceil(count / pageSize) });
 });
 
 export const getProduct = catchAsync(async (req, res, next) => {
