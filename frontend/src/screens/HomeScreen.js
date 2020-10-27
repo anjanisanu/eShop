@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { Row, Col } from 'react-bootstrap';
 
 import Meta from './../components/Meta';
@@ -29,14 +30,21 @@ const HomeScreen = ({ match }) => {
 	return (
 		<Fragment>
 			<Meta />
-			{!keyword && <ProductCarousel />}
-			<h1>Latest Products</h1>
+			{!keyword ? (
+				<ProductCarousel />
+			) : (
+				<Link to='/' className='btn btn-light'>
+					Go Back
+				</Link>
+			)}
+			<h1>{!keyword ? 'Latest Products' : `Search Results for ${keyword}`}</h1>
 			{loading ? (
 				<Loader />
 			) : error ? (
 				<Message variant='danger'>{error}</Message>
 			) : (
 				<Fragment>
+					{products.length === 0 && <p>Oops! No Orders found.</p>}
 					<Row>
 						{products.map((product) => (
 							<Col key={product._id} sm={12} md={6} lg={4} xl={3}>
