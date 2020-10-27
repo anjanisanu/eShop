@@ -2,6 +2,12 @@ import Product from './../models/productModel.js';
 import catchAsync from './../utils/catchAsync.js';
 import AppError from './../utils/appError.js';
 
+export const getTopProducts = catchAsync(async (req, res, next) => {
+	const products = await Product.find().sort({ rating: -1 }).limit(3);
+
+	res.status(200).json(products);
+});
+
 export const getProducts = catchAsync(async (req, res, next) => {
 	const pageSize = 10;
 	const page = Number(req.query.pageNumber) || 1;
