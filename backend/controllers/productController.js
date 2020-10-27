@@ -3,7 +3,16 @@ import catchAsync from './../utils/catchAsync.js';
 import AppError from './../utils/appError.js';
 
 export const getProducts = catchAsync(async (req, res, next) => {
-	const products = await Product.find();
+	const keyword = req.query.keyword
+		? {
+				name: {
+					$regex: req.query.keyword,
+					$options: 'i'
+				}
+			}
+		: {};
+
+	const products = await Product.find({ ...keyword });
 	res.json(products);
 });
 
